@@ -27,68 +27,78 @@ function delay(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function buildUrl(chain: string, action: string, address: string): string {
+function buildUrl(chain: string, action: string, address: string, apiKey: string): string {
   const chainId = CHAIN_IDS[chain] || 1;
-  return `${API_BASE}?chainid=${chainId}&module=account&action=${action}&address=${address}&tag=latest&apikey=${ETHERSCAN_API_KEY}`;
+  return `${API_BASE}?chainid=${chainId}&module=account&action=${action}&address=${address}&tag=latest&apikey=${apiKey}`;
 }
 
-export async function getNormalTxs(
+async function getNormalTxs(
   chain: string,
   address: string,
+  apiKey: string,
   page = 1,
   offset = 100
 ): Promise<EtherscanTx[]> {
-  let url = buildUrl(chain, 'txlist', address);
+  let url = buildUrl(chain, 'txlist', address, apiKey);
   url += `&page=${page}&offset=${offset}&sort=asc`;
   const data = await callEtherscan(url);
   return data.result || [];
 }
 
-export async function getInternalTxs(
+async function getInternalTxs(
   chain: string,
   address: string,
+  apiKey: string,
   page = 1,
   offset = 100
 ): Promise<EtherscanInternalTx[]> {
-  let url = buildUrl(chain, 'txlistinternal', address);
+  let url = buildUrl(chain, 'txlistinternal', address, apiKey);
   url += `&page=${page}&offset=${offset}&sort=asc`;
   const data = await callEtherscan(url);
   return data.result || [];
 }
 
-export async function getTokenTxs(
+async function getTokenTxs(
   chain: string,
   address: string,
+  apiKey: string,
   page = 1,
   offset = 100
 ): Promise<EtherscanTokenTx[]> {
-  let url = buildUrl(chain, 'tokentx', address);
+  let url = buildUrl(chain, 'tokentx', address, apiKey);
   url += `&page=${page}&offset=${offset}&sort=asc`;
   const data = await callEtherscan(url);
   return data.result || [];
 }
 
-export async function getNativeBalance(
+async function getNativeBalance(
   chain: string,
-  address: string
+  address: string,
+  apiKey: string
 ): Promise<string> {
-  const url = buildUrl(chain, 'balance', address);
+  const url = buildUrl(chain, 'balance', address, apiKey);
   const data = await callEtherscan(url);
   return data.result || '0';
 }
 
-export async function getWalletData(chain: string, address: string): Promise<{
+export async function getWalletData(
+  chain: string,
+  address: string,
+  providedApiKey?: string
+): Promise<{
   normalTxs: EtherscanTx[];
   internalTxs: EtherscanInternalTx[];
   tokenTxs: EtherscanTokenTx[];
   nativeBalance: string;
 }> {
-  const normalTxs = await getNormalTxs(chain, address);
+  const apiKey = providedApiKey || ETHERSCAN_API_KEY;
+
+  const normalTxs = await getNormalTxs(chain, address, apiKey);
   await delay(400);
-  const internalTxs = await getInternalTxs(chain, address);
+  const internalTxs = await getInternalTxs(chain, address, apiKey);
   await delay(400);
-  const tokenTxs = await getTokenTxs(chain, address);
+  const tokenTxs = await getTokenTxs(chain, address, apiKey);
   await delay(400);
-  const nativeBalance = await getNativeBalance(chain, address);
+  const nativeBalance = await getNativeBalance(chain, address, apiKey);
   return { normalTxs, internalTxs, tokenTxs, nativeBalance };
 }

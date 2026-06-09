@@ -13,13 +13,16 @@ export default function Home() {
   const [report, setReport] = useState<WalletReport | null>(null);
   const [error, setError] = useState('');
 
-  async function handleAnalyze(chain: string, address: string) {
+  async function handleAnalyze(chain: string, address: string, apiKey?: string) {
     setLoading(true);
     setError('');
     setReport(null);
 
     try {
-      const res = await fetch(`/api/wallet/${chain}/${address}`);
+      let url = `/api/wallet/${chain}/${address}`;
+      if (apiKey) url += `?apiKey=${encodeURIComponent(apiKey)}`;
+
+      const res = await fetch(url);
       const data: WalletReport & { error?: string } = await res.json();
 
       if (!res.ok || data.error) {
