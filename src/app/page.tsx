@@ -36,12 +36,12 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center min-h-screen px-4 py-12 sm:py-20 gap-8">
-      <div className="text-center max-w-lg">
-        <h1 className="text-3xl sm:text-4xl font-bold text-white">
+    <div className="flex flex-col items-center min-h-screen px-3 sm:px-4 py-8 sm:py-20 gap-5 sm:gap-8">
+      <div className="text-center max-w-lg px-2 sm:px-0">
+        <h1 className="text-2xl sm:text-4xl font-bold text-white">
           Wallet Reputation Checker
         </h1>
-        <p className="text-gray-400 mt-2 text-sm">
+        <p className="text-gray-400 mt-1 sm:mt-2 text-xs sm:text-sm">
           Paste any wallet address to get a reputation score, transaction insights, and risk indicators.
         </p>
       </div>
@@ -49,23 +49,25 @@ export default function Home() {
       <WalletInput onAnalyze={handleAnalyze} loading={loading} />
 
       {loading && (
-        <div className="flex items-center gap-2 text-gray-400 text-sm">
-          <div className="w-4 h-4 border-2 border-gray-600 border-t-blue-500 rounded-full animate-spin" />
+        <div className="flex items-center gap-2 text-gray-400 text-xs sm:text-sm">
+          <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-gray-600 border-t-blue-500 rounded-full animate-spin" />
           Fetching on-chain data...
         </div>
       )}
 
       {error && (
-        <div className="w-full max-w-2xl bg-red-900/30 border border-red-800 rounded-xl p-4 text-red-300 text-sm">
-          {error}
+        <div className="w-full max-w-2xl px-2 sm:px-0">
+          <div className="bg-red-900/30 border border-red-800 rounded-xl p-3 sm:p-4 text-red-300 text-xs sm:text-sm break-words">
+            {error}
+          </div>
         </div>
       )}
 
       {report && (
         <>
-          <div className="flex items-center gap-2 text-xs text-gray-500">
-            <span>{report.address.slice(0, 10)}...{report.address.slice(-6)}</span>
-            <span>•</span>
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-500 px-2 sm:px-0">
+            <span className="font-mono">{report.address.slice(0, 10)}...{report.address.slice(-6)}</span>
+            <span className="hidden sm:inline">•</span>
             <span>{report.chainName}</span>
             <a
               href={report.explorerUrl}

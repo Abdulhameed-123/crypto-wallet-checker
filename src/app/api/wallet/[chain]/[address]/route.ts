@@ -50,18 +50,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json(report);
   } catch (err: any) {
     console.error('Wallet analysis error:', err);
-    let message = err.message || 'Failed to analyze wallet';
+    let message = 'Failed to analyze wallet';
     if (err instanceof EtherscanError) {
-      if (message.includes('Invalid API Key') || message === 'NOTOK') {
-        const code = err.code || '';
-        if (code.toLowerCase().includes('rate limit')) {
-          message = 'Rate limited by Etherscan API. Please wait a moment and try again.';
-        } else if (code.includes('Invalid') || code.includes('Missing')) {
-          message = 'Invalid Etherscan API key. Set a valid ETHERSCAN_API_KEY in .env.local';
-        }
+      const code = err.code || '';
+      if (code && !code.startsWith('NOTOK')) {
+        message = code;
       } else {
-        message = `Blockchain explorer API error: ${message}`;
+        message = 'Blockchain explorer API error. Please check your API key in .env.local and try again.';
       }
+    } else if (err.message) {
+      message = err.message;
     }
     return NextResponse.json(
       { error: message } as WalletReport,

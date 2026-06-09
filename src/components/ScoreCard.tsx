@@ -29,7 +29,6 @@ function gradeBg(grade: string): string {
 
 export default function ScoreCard({ score }: Props) {
   const { breakdown } = score;
-  const maxWeight = SCORE_WEIGHTS.longevity + SCORE_WEIGHTS.activity + SCORE_WEIGHTS.diversity + SCORE_WEIGHTS.consistency;
 
   const bars = [
     { label: 'Longevity', value: breakdown.longevity, max: SCORE_WEIGHTS.longevity, color: 'bg-green-500' },
@@ -39,16 +38,16 @@ export default function ScoreCard({ score }: Props) {
   ];
 
   return (
-    <div className="w-full max-w-2xl">
-      <div className={`rounded-xl border p-6 ${gradeBg(score.grade)}`}>
-        <div className="flex items-center justify-between mb-6">
+    <div className="w-full max-w-2xl px-2 sm:px-0">
+      <div className={`rounded-xl border p-4 sm:p-6 ${gradeBg(score.grade)}`}>
+        <div className="flex items-center justify-between mb-5 sm:mb-6">
           <div>
-            <div className={`text-5xl font-bold ${gradeColor(score.grade)}`}>{score.grade}</div>
-            <div className="text-sm text-gray-400 mt-1">Grade</div>
+            <div className={`text-4xl sm:text-5xl font-bold ${gradeColor(score.grade)}`}>{score.grade}</div>
+            <div className="text-xs sm:text-sm text-gray-400 mt-0.5">Grade</div>
           </div>
           <div className="text-right">
-            <div className="text-4xl font-bold text-white">{score.score}</div>
-            <div className="text-sm text-gray-400 mt-1">/ 100</div>
+            <div className="text-3xl sm:text-4xl font-bold text-white">{score.score}</div>
+            <div className="text-xs sm:text-sm text-gray-400 mt-0.5">/ 100</div>
           </div>
         </div>
 

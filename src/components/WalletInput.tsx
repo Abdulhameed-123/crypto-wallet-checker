@@ -18,13 +18,13 @@ export default function WalletInput({ onAnalyze, loading }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-2xl">
+    <form onSubmit={handleSubmit} className="w-full max-w-2xl px-2 sm:px-0">
       <div className="flex flex-col gap-3">
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
           <select
             value={chain}
             onChange={(e) => setChain(e.target.value)}
-            className="px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto px-3 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {Object.entries(CHAINS).map(([key, cfg]) => (
               <option key={key} value={key}>{cfg.name}</option>
@@ -34,8 +34,9 @@ export default function WalletInput({ onAnalyze, loading }: Props) {
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            placeholder="0x... or 0x0000...0000"
-            className="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Paste wallet address (0x...)"
+            className="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+            spellCheck={false}
           />
         </div>
         <button
