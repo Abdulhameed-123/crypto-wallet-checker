@@ -12,7 +12,6 @@ interface RouteParams {
 
 export async function GET(request: NextRequest, { params }: RouteParams) {
   const { chain, address } = await params;
-  const apiKey = request.nextUrl.searchParams.get('apiKey') || undefined;
 
   if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
     return NextResponse.json({ error: 'Invalid wallet address' } as WalletReport, { status: 400 });
@@ -24,7 +23,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 
   try {
-    const { normalTxs, internalTxs, tokenTxs, nativeBalance } = await getWalletData(chain, address, apiKey);
+    const { normalTxs, internalTxs, tokenTxs, nativeBalance } = await getWalletData(chain, address);
 
     const metrics = analyzeWallet(
       address,
@@ -57,7 +56,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       if (code && !code.startsWith('NOTOK')) {
         message = code;
       } else {
-        message = 'Etherscan API error. Provide a valid API key (free at etherscan.io/register).';
+        message = 'Blockchain explorer API error. Please try again later.';
       }
     } else if (err.message) {
       message = err.message;

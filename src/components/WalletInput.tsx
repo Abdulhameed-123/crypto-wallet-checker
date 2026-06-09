@@ -4,19 +4,17 @@ import { useState, FormEvent } from 'react';
 import { CHAINS } from '@/config';
 
 interface Props {
-  onAnalyze: (chain: string, address: string, apiKey?: string) => void;
+  onAnalyze: (chain: string, address: string) => void;
   loading: boolean;
 }
 
 export default function WalletInput({ onAnalyze, loading }: Props) {
   const [address, setAddress] = useState('');
   const [chain, setChain] = useState('ethereum');
-  const [apiKey, setApiKey] = useState('');
-  const [showApiKey, setShowApiKey] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (address.trim()) onAnalyze(chain, address.trim(), apiKey.trim() || undefined);
+    if (address.trim()) onAnalyze(chain, address.trim());
   };
 
   return (
@@ -41,7 +39,6 @@ export default function WalletInput({ onAnalyze, loading }: Props) {
             spellCheck={false}
           />
         </div>
-
         <button
           type="submit"
           disabled={loading || !address.trim()}
@@ -49,38 +46,6 @@ export default function WalletInput({ onAnalyze, loading }: Props) {
         >
           {loading ? 'Analyzing...' : 'Check Wallet Reputation'}
         </button>
-
-        <div className="flex items-center justify-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => setShowApiKey(!showApiKey)}
-            className="text-[11px] text-gray-500 hover:text-gray-300 transition-colors"
-          >
-            {showApiKey ? 'Hide' : 'Need an API key?'}
-          </button>
-          <a
-            href="https://etherscan.io/register"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] text-blue-400 hover:text-blue-300 underline"
-          >
-            Get free key
-          </a>
-        </div>
-
-        {showApiKey && (
-          <div className="flex flex-col gap-1">
-            <input
-              type="text"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="Paste your Etherscan API key"
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-              spellCheck={false}
-            />
-            <p className="text-[10px] text-gray-600">Required for deployed sites. Saved for this session only.</p>
-          </div>
-        )}
       </div>
     </form>
   );
