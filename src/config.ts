@@ -1,4 +1,4 @@
-export const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || 'YourApiKeyToken';
+export const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || 'G43PRJ54R2CE6941ZBVAU57R4AGV9C2IBV';
 
 export interface ChainConfig {
   name: string;
